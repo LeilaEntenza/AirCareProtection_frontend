@@ -15,6 +15,7 @@ import Clima from './screens/Clima';
 import Ubicacion from './screens/Ubicacion';
 import Contacto from './screens/Contacto';
 import Emergencias from './screens/Emergencias';
+import CuentaAjuste from './screens/CuentaAjuste';
 
 const AuthStack = createNativeStackNavigator();
 function LoginStack(){
@@ -75,17 +76,47 @@ function AjustesStack(){
 }
 
 const Tab = createBottomTabNavigator();
-function Tabs(){
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+function Tabs() {
   return (
-    // ocultamos el header del tab para que cada stack muestre su propio header
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
-      <Tab.Screen name="Home" component={HomeStack}/>
-      <Tab.Screen name="Scenes" component={ScenesStack}/>
-      <Tab.Screen name="Historial" component={HistorialStack}/>
-      <Tab.Screen name="Ajustes" component={AjustesStack}/>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarActiveTintColor: '#636891',
+        tabBarInactiveTintColor: 'gray',
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          switch (route.name) {
+            case 'Home':
+              iconName = focused ? 'home' : 'home-outline';
+              break;
+            case 'Scenes':
+              iconName = focused ? 'monitor-dashboard' : 'monitor-dashboard';
+              break;
+            case 'Historial':
+              iconName = focused ? 'history' : 'history';
+              break;
+            case 'Ajustes':
+              iconName = focused ? 'cog' : 'cog-outline';
+              break;
+            default:
+              iconName = 'circle';
+          }
+
+          return <Icon name={iconName} size={size} color={color} />;
+        },
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeStack} />
+      <Tab.Screen name="Scenes" component={ScenesStack} />
+      <Tab.Screen name="Historial" component={HistorialStack} />
+      <Tab.Screen name="Ajustes" component={AjustesStack} />
     </Tab.Navigator>
-  )
+  );
 }
+
 
 const RootStack = createNativeStackNavigator();
 function AppStack(){

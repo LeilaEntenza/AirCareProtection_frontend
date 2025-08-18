@@ -1,5 +1,6 @@
 import React from 'react';
-import { ScrollView, View, Text, StyleSheet, Image, Pressable } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Pressable } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function Contacto({ navigation }) {
   return (
@@ -8,40 +9,30 @@ export default function Contacto({ navigation }) {
 
       {/* Primera card */}
       <View style={styles.cardScene}>
-        <Image
-          source={{ uri: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNiAxN2MwLTIgNC0zLjEgNi0zLjFzNiAxLjEgNiAzLjF2MUg2bTktOWEzIDMgMCAwIDEtMyAzYTMgMyAwIDAgMS0zLTNhMyAzIDAgMCAxIDMtM2EzIDMgMCAwIDEgMyAzTTMgNXYxNGEyIDIgMCAwIDAgMiAyaDE0YTIgMiAwIDAgMCAyLTJWNWEyIDIgMCAwIDAtMi0ySDVhMiAyIDAgMCAwLTIgMiIvPjwvc3ZnPg==' }}
-          style={styles.icono}
-        />
-
+        <Icon name="account-circle" size={50} color="white" />
         <View style={styles.textContainer}>
-          <Text style={styles.textoCardScene}>Contacto</Text>
+          <Text style={styles.textoCardScene}>Contacto 1</Text>
         </View>
-
-        <Image
-          source={{ uri: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTkgNGgtMy41bC0xLTFoLTVsLTEgMUg1djJoMTRNNiAxOWEyIDIgMCAwIDAgMiAyaDhhMiAyIDAgMCAwIDItMlY3SDZ6Ii8+PC9zdmc+' }}
-          style={{width: 40, height: 40}}
-        />
+        <Pressable onPress={() => console.log('Eliminar contacto 1')}>
+          <Icon name="close-circle-outline" size={40} color="white" />
+        </Pressable>
       </View>
 
       {/* Segunda card */}
       <View style={styles.cardScene}>
-        <Image
-          source={{ uri: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNiAxN2MwLTIgNC0zLjEgNi0zLjFzNiAxLjEgNiAzLjF2MUg2bTktOWEzIDMgMCAwIDEtMyAzYTMgMyAwIDAgMS0zLTNhMyAzIDAgMCAxIDMtM2EzIDMgMCAwIDEgMyAzTTMgNXYxNGEyIDIgMCAwIDAgMiAyaDE0YTIgMiAwIDAgMCAyLTJWNWEyIDIgMCAwIDAtMi0ySDVhMiAyIDAgMCAwLTIgMiIvPjwvc3ZnPg==' }}
-          style={styles.icono}
-        />
-
+        <Icon name="account-circle" size={50} color="white" />
         <View style={styles.textContainer}>
-          <Text style={styles.textoCardScene}>Contacto</Text>
+          <Text style={styles.textoCardScene}>Contacto 2</Text>
         </View>
-
-        <Image
-          source={{ uri: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTkgNGgtMy41bC0xLTFoLTVsLTEgMUg1djJoMTRNNiAxOWEyIDIgMCAwIDAgMiAyaDhhMiAyIDAgMCAwIDItMlY3SDZ6Ii8+PC9zdmc+' }}
-          style={{width: 40, height: 40}}
-        />
-        <Pressable style={styles.boton} onPress={() => navigation.goBack()}>
-          <Text style={styles.textButton}>Guardar</Text>
+        <Pressable onPress={() => console.log('Eliminar contacto 2')}>
+          <Icon name="close-circle-outline" size={40} color="white" />
         </Pressable>
       </View>
+
+      {/* Botón Guardar */}
+      <Pressable style={styles.botonGuardar} onPress={() => navigation.goBack()}>
+        <Text style={styles.textButton}>Guardar</Text>
+      </Pressable>
     </ScrollView>
   );
 }
@@ -53,47 +44,45 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     paddingVertical: 12,
   },
   titulo: {
-    fontSize: 18,
+    fontSize: 20,
     marginBottom: 10,
     fontWeight: 'bold',
+    color: '#222',
   },
   cardScene: {
     width: '90%',
-    backgroundColor: '#979797',
-    borderRadius: 10,
+    backgroundColor: '#636891',
+    borderRadius: 12,
     padding: 20,
-    margin: 20,
+    marginVertical: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 100, // asegura altura uniforme
-  },
-  icono: {
-    width: 50,
-    height: 50,
+    justifyContent: 'space-between', // asegura que eliminar esté a la derecha
   },
   textContainer: {
     flex: 1,
-    marginLeft: 20,
+    marginHorizontal: 16,
   },
   textoCardScene: {
-    fontSize: 20,
+    fontSize: 18,
     color: 'white',
   },
-    boton: {
+  botonGuardar: {
     backgroundColor: '#636891',
-    width: '40%',
-    padding: 10,
-    borderRadius: 6,
+    width: '60%',
+    paddingVertical: 12,
+    borderRadius: 8,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 20,
   },
   textButton: {
     color: 'white',
     fontSize: 16,
+    fontWeight: '600',
   },
 });

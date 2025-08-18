@@ -13,7 +13,7 @@ export default function Temperatura({ navigation }) {
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
       <Text style={styles.textoInicio}>Temperatura actual: 5°C</Text>
       <View style={styles.climaNotificacion}>
-        <Text style={styles.label}>Notificar ante temperaturas anormales</Text>
+        <Text style={styles.label}>Notificar temperaturas anormales</Text>
         <Switch
           trackColor={{ false: "#000000", true: "#000000" }}
           thumbColor="#ffffff"

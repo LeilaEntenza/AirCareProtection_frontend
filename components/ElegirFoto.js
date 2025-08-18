@@ -1,35 +1,58 @@
 import React, { useState } from "react";
-import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
-import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { View, Text, Image, StyleSheet, Pressable, Alert } from 'react-native';
 
 export default function ElegirFoto() {
     const [imagen, setImagen] = useState(null);
-    const seleccionarDeGaleria = () =>{
-        launchImageLibrary({mediaType: 'photo'}, (response)=>{
-            if(response.didCancel){
-                console.log("El usuario canceló");
+    
+    const seleccionarDeGaleria = async () => {
+        try {
+            // Solicitar permisos
+            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            if (status !== 'granted') {
+                Alert.alert('Permisos necesarios', 'Se necesitan permisos para acceder a la galería');
+                return;
             }
-            else if(response.errorMessage){
-                console.log('ImagePicker error: ', response.errorMessage);
+
+            const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 0.8,
+            });
+            
+            if (!result.canceled && result.assets && result.assets[0]) {
+                setImagen(result.assets[0].uri);
             }
-            else{
-                if (response.assets && response.assets[0]) setImagen(response.assets[0].uri);
+        } catch (error) {
+            console.log('Error al abrir galería:', error);
+            Alert.alert('Error', 'No se pudo abrir la galería');
+        }
+    };
+    
+    const sacarFoto = async () => {
+        try {
+            // Solicitar permisos
+            const { status } = await ImagePicker.requestCameraPermissionsAsync();
+            if (status !== 'granted') {
+                Alert.alert('Permisos necesarios', 'Se necesitan permisos para acceder a la cámara');
+                return;
             }
-        })
-    }
-    const sacarFoto = () =>{
-        launchCamera({mediaType: 'photo'}, (response)=>{
-            if(response.didCancel){
-                console.log('El usuario canceló');
+
+            const result = await ImagePicker.launchCameraAsync({
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 0.8,
+            });
+            
+            if (!result.canceled && result.assets && result.assets[0]) {
+                setImagen(result.assets[0].uri);
             }
-            else if(response.errorMessage){
-                console.log('ImagePicker error: ', response.errorMessage);
-            }
-            else{
-                if (response.assets && response.assets[0]) setImagen(response.assets[0].uri);
-            }
-        })
-    }
+        } catch (error) {
+            console.log('Error al abrir cámara:', error);
+            Alert.alert('Error', 'No se pudo abrir la cámara');
+        }
+    };
 
     return(
         <View style={styles.container}>
@@ -48,10 +71,10 @@ export default function ElegirFoto() {
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1,
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
+        marginVertical: 10,
     },
     imagenSeleccionada:{
         width: 80,
@@ -66,7 +89,7 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
         height: 40,
         fontSize: 15,
-        borderRadius:5,
+        borderRadius: 5,
         justifyContent: "center",
         margin: 4,
     },

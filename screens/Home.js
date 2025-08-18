@@ -1,14 +1,20 @@
 import React, { act } from 'react';
 import { View, Text, StyleSheet, Image, Pressable, ScrollView } from 'react-native';
 import Dispositivo from '../components/Dispositivo';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 export default function Home({ navigation }) {
     const isAuthenticated = false;
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
             <Text style={styles.textoInicio}>Dispositivos</Text>
-            <View style={styles.dispositivos}>
+            <ScrollView 
+                horizontal 
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.dispositivos}
+                style={styles.dispositivosContainer}
+            >
                 <Dispositivo/>
                 <Dispositivo/>
                 <Pressable
@@ -22,7 +28,7 @@ export default function Home({ navigation }) {
                         style={styles.addIcon}
                     />
                 </Pressable>
-            </View>
+            </ScrollView>
             <Text style={styles.textoInicio}>Clima</Text>
             {/* Va a haber que conectar con la API del clima */}
             <Image
@@ -31,44 +37,45 @@ export default function Home({ navigation }) {
                 resizeMode="contain"
             />
             <Text style={styles.textoInicio}>Última actividad</Text>
-            <View style={styles.ultimaActividad}>
-                <Image
-                source={{ uri: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMDAwIiBkPSJNMTIgMkExMCAxMCAwIDAgMCAyIDEyYTEwIDEwIDAgMCAwIDEwIDEwYTEwIDEwIDAgMCAwIDEwLTEwQTEwIDEwIDAgMCAwIDEyIDJtNC4yIDE0LjJMMTEgMTNWN2gxLjV2NS4ybDQuNSAyLjd6Ii8+PC9zdmc+' }}
-                style={styles.actividadReloj}
-                resizeMode="contain"
-                accessibilityLabel="Reloj de última actividad"
-                />
+            <View style={styles.ultimaActividadCard}>
+            <Icon name="clock-outline" size={48} color="#000" />
+
                 <View style={styles.ultimaActividadTextos}>
-                    <Text style={styles.textoInicio}>Todo se encuentra en orden</Text>
+                    <Text style={styles.textoCard}>Todo se encuentra en orden</Text>
                     <Text style={styles.textoPetit}>Última actualización hace 2 minutos</Text>
                 </View>
-            </View>
+                </View>
 
         </ScrollView>
     );
 }
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      width: '100%',
+    container: { 
+        flex: 1, 
+        width: '100%' 
     },
-    scrollContent: {
-      marginBottom: 20,
+    scrollContent: { 
+        paddingVertical: 12, 
+        paddingHorizontal: 12, 
+        paddingBottom: 40 
+    },
+    dispositivosContainer: {
+        marginTop: 20,
+        backgroundColor: '#636891',
+        padding: 12,
+        borderRadius: 12,
+        marginHorizontal: 0,
     },
     dispositivos: {
         flexDirection: 'row',
-        marginTop: 20,
-        flexWrap: 'wrap',
-        width: '100%',
-        backgroundColor: '#636891',
-        padding: 12,
-        justifyContent: 'flex-start',
+        alignItems: 'center',
+        paddingRight: 12,
     },
     addCard: {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '30%',
+        width: 120,
         minHeight: 104,
         backgroundColor: '#fff',
         padding: 12,
@@ -101,31 +108,39 @@ const styles = StyleSheet.create({
         alignSelf: 'center', 
         overflow: 'hidden',  
     },
-    ultimaActividad: {
-        alignSelf: 'center',     
-        backgroundColor: '#c5c5c5ff',
-        marginTop: 12,
-        padding: 20,
-        borderRadius: 12,   
-        width: '90%',
+    ultimaActividadCard: {
         flexDirection: 'row',
-        alignItems: 'center', 
-        justifyContent: 'flex-start',
-    },
-    ultimaActividadTextos: {
+        alignItems: 'center',
+        backgroundColor: '#c5c5c5ff',
+        padding: 16,
+        borderRadius: 12,
+        marginVertical: 8,
+        width: '90%',
+        alignSelf: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.12,
+        shadowRadius: 4,
+        elevation: 3,
+      },
+      ultimaActividadTextos: {
         flexDirection: 'column',
-        alignItems: 'flex-start',
         marginLeft: 12,
-    },
-    actividadReloj: {
-        width: 48,
-        height: 48,
-        margin: 10,
-        tintColor: '#000000ff',
-    },
-    textoPetit: {
+        flexShrink: 1, // evita que el texto se desborde
+      },
+      textoCard: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#222',
+      },
+      textoPetit: {
         fontSize: 14,
         color: '#636891',
         marginTop: 4,
-    },
+      },
+      actividadReloj: {
+        width: 48,
+        height: 48,
+        tintColor: '#000',
+      },
 });
