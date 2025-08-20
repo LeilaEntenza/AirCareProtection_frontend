@@ -12,19 +12,24 @@ export default function Ajustes({navigation}) {
             </Pressable>
 
             <Text style={styles.textoPrincipal}>Privacidad</Text>
-            <Pressable style={({ pressed }) => [styles.seccionAjuste, pressed && styles.seccionAjustePressed]}>
+            <Pressable onPress={()=>navigation.navigate("UbicacionAjuste")} style={({ pressed }) => [styles.seccionAjuste, pressed && styles.seccionAjustePressed]}>
                 <Icon name="map-marker" size={30} color="#636891" />
                 <Text style={styles.textoSeccion}>Ubicación</Text>
             </Pressable>
-            <Pressable style={({ pressed }) => [styles.seccionAjuste, pressed && styles.seccionAjustePressed]}>
+            <Pressable onPress={()=>navigation.navigate("ContactosAjuste")} style={({ pressed }) => [styles.seccionAjuste, pressed && styles.seccionAjustePressed]}>
                 <Icon name="account-group" size={30} color="#636891" />
                 <Text style={styles.textoSeccion}>Contactos</Text>
             </Pressable>
 
             <Text style={styles.textoPrincipal}>Notificaciones</Text>
-            <Pressable style={({ pressed }) => [styles.seccionAjuste, pressed && styles.seccionAjustePressed]}>
+            <Pressable onPress={()=>navigation.navigate("NotificacionesAjuste")} style={({ pressed }) => [styles.seccionAjuste, pressed && styles.seccionAjustePressed]}>
                 <Icon name="bell" size={30} color="#636891" />
                 <Text style={styles.textoSeccion}>Alertas</Text>
+            </Pressable>
+
+            <Pressable style={({ pressed }) => [styles.seccionAjuste, pressed && styles.seccionAjustePressed]}>
+                <Icon name="logout" size={20} color="#636891" />
+                <Text style={styles.textoSeccion}>Cerrar sesión</Text>
             </Pressable>
         </ScrollView>
     );

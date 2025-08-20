@@ -16,6 +16,9 @@ import Ubicacion from './screens/Ubicacion';
 import Contacto from './screens/Contacto';
 import Emergencias from './screens/Emergencias';
 import CuentaAjuste from './screens/CuentaAjuste';
+import UbicacionAjuste from './screens/UbicacionAjuste';
+import ContactosAjuste from './screens/ContactosAjuste';
+import NotificacionesAjuste from './screens/NotificacionesAjuste';
 
 const AuthStack = createNativeStackNavigator();
 function LoginStack(){
@@ -70,7 +73,10 @@ function AjustesStack(){
   return (
     <AjustesStackNav.Navigator>
       <AjustesStackNav.Screen name="AjustesMain" component={Ajustes} options={{ title: 'Ajustes' }}/>
-      {/* ...pantallas relacionadas con Ajustes */}
+      <AjustesStackNav.Screen name="CuentaAjuste" component={CuentaAjuste} options={{ title: 'Cuenta' }}/>
+      <AjustesStackNav.Screen name="UbicacionAjuste" component={UbicacionAjuste} options={{ title: 'Ubicación' }}/>
+      <AjustesStackNav.Screen name="ContactosAjuste" component={ContactosAjuste} options={{ title: 'Contactos' }}/>
+      <AjustesStackNav.Screen name="NotificacionesAjuste" component={NotificacionesAjuste} options={{ title: 'Notificaciones' }}/>
     </AjustesStackNav.Navigator>
   );
 }
