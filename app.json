@@ -19,7 +19,9 @@
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Esta app necesita acceso a tu galería para seleccionar fotos de dispositivos.",
         "NSCameraUsageDescription": "Esta app necesita acceso a tu cámara para tomar fotos de dispositivos."
-      }
+      },
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "bundleIdentifier": "com.aircare.ios"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,10 +32,24 @@
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE"
-      ]
+      ],
+      "googleServicesFile": "./google-services.json",
+      "package": "com.aicare.aircareprotection"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ]
   }
 }
