@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 
 import Home from './screens/Home';
 import Historial from './screens/Historial';
@@ -19,6 +21,22 @@ import CuentaAjuste from './screens/CuentaAjuste';
 import UbicacionAjuste from './screens/UbicacionAjuste';
 import ContactosAjuste from './screens/ContactosAjuste';
 import NotificacionesAjuste from './screens/NotificacionesAjuste';
+
+// Inicializa Firebase solo una vez
+const firebaseConfig = {
+    apiKey: "AIzaSyAU3mRgL465cBZZXwZimnUwt9pWheYUkoA",
+    authDomain: "aircare-protection.firebaseapp.com",
+    projectId: "aircare-protection",
+    storageBucket: "aircare-protection.firebasestorage.app",
+    messagingSenderId: "90031869318",
+    appId: "1:90031869318:ios:5f4b946b5db364c5f0f007"
+};
+let app;
+try {
+    app = initializeApp(firebaseConfig);
+} catch (e) {
+    // ya inicializado
+}
 
 const AuthStack = createNativeStackNavigator();
 function LoginStack(){
@@ -135,7 +153,21 @@ function AppStack(){
 }
 
 export default function App() {
-  const isAuthenticated = true;
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsAuthenticated(!!user);
+    });
+    return unsubscribe;
+  }, []);
+
+  if (isAuthenticated === null) {
+    // Puedes mostrar un loader/spinner aquí si quieres
+    return null;
+  }
+
   return (
     <NavigationContainer>
       {isAuthenticated ? <AppStack/> : <LoginStack/> }

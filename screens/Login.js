@@ -1,6 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput, View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+// Cambia el import de auth
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+
+// Inicializa Firebase si no está inicializado
+const firebaseConfig = {
+    apiKey: "AIzaSyAU3mRgL465cBZZXwZimnUwt9pWheYUkoA",
+    authDomain: "aircare-protection.firebaseapp.com",
+    projectId: "aircare-protection",
+    storageBucket: "aircare-protection.firebasestorage.app",
+    messagingSenderId: "90031869318",
+    appId: "1:90031869318:ios:5f4b946b5db364c5f0f007"
+};
+let app;
+try {
+    app = initializeApp(firebaseConfig);
+} catch (e) {
+    // ya inicializado
+}
 
 export default function Login({ navigation }) {
     const { control, handleSubmit, formState: { errors } } = useForm({
@@ -9,9 +28,16 @@ export default function Login({ navigation }) {
             contrasena: ''
         }
     });
-    const onSubmit = (data) => {
-        // autenticar / navegar
-        navigation.replace('Main'); // o la lógica que uses
+    const [authError, setAuthError] = useState('');
+
+    const onSubmit = async (data) => {
+        setAuthError('');
+        const auth = getAuth();
+        try {
+            await signInWithEmailAndPassword(auth, data.mail, data.contrasena);
+        } catch (error) {
+            setAuthError(error.message);
+        }
     };
 
     return (
@@ -65,6 +91,7 @@ export default function Login({ navigation }) {
                 <Pressable>
                     <Text style={styles.noCuenta}>¿Olvidaste tu contraseña?</Text>
                 </Pressable>
+                {authError ? <Text style={styles.textoError}>{authError}</Text> : null}
                 <Pressable style={styles.boton} onPress={handleSubmit(onSubmit)}>
                     <Text style={styles.textButton}>Iniciar sesión</Text>
                 </Pressable>

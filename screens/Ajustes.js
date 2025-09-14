@@ -1,8 +1,18 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { getAuth, signOut } from 'firebase/auth';
 
 export default function Ajustes({navigation}) {
+    const handleLogout = async () => {
+        try {
+            const auth = getAuth();
+            await signOut(auth);
+        } catch (error) {
+            console.log('Error al cerrar sesión:', error);
+        }
+    };
+
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
             <Text style={styles.textoPrincipal}>General</Text>
@@ -27,7 +37,7 @@ export default function Ajustes({navigation}) {
                 <Text style={styles.textoSeccion}>Alertas</Text>
             </Pressable>
 
-            <Pressable style={({ pressed }) => [styles.seccionAjuste, pressed && styles.seccionAjustePressed]}>
+            <Pressable style={({ pressed }) => [styles.seccionAjuste, pressed && styles.seccionAjustePressed]} onPress={handleLogout}>
                 <Icon name="logout" size={20} color="#636891" />
                 <Text style={styles.textoSeccion}>Cerrar sesión</Text>
             </Pressable>

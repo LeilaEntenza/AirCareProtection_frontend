@@ -1,7 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput, View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import ElegirFoto from '../components/ElegirFoto';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+
+// Inicializa Firebase si no está inicializado
+const firebaseConfig = {
+    apiKey: "AIzaSyAU3mRgL465cBZZXwZimnUwt9pWheYUkoA",
+    authDomain: "aircare-protection.firebaseapp.com",
+    projectId: "aircare-protection",
+    storageBucket: "aircare-protection.firebasestorage.app",
+    messagingSenderId: "90031869318",
+    appId: "1:90031869318:ios:5f4b946b5db364c5f0f007"
+};
+let app;
+try {
+    app = initializeApp(firebaseConfig);
+} catch (e) {
+    // ya inicializado
+}
 
 export default function Register({ navigation }) {
     const { control, handleSubmit, formState: {errors} } = useForm({
@@ -12,8 +30,16 @@ export default function Register({ navigation }) {
             foto: ''
         }
     });
-    const onSubmit = (data) => {
-        navigation.navigate('EnviadoExito');
+    const [authError, setAuthError] = useState('');
+
+    const onSubmit = async (data) => {
+        setAuthError('');
+        const auth = getAuth();
+        try {
+            await createUserWithEmailAndPassword(auth, data.mail, data.contrasena);
+        } catch (error) {
+            setAuthError(error.message);
+        }
     }
     return (
         <ScrollView
@@ -84,6 +110,7 @@ export default function Register({ navigation }) {
                 )}
                 />
                 {errors.contrasena && <Text style={styles.textoError}>{errors.contrasena.message}</Text>}
+                {authError ? <Text style={styles.textoError}>{authError}</Text> : null}
 
                 <Pressable onPress={() => navigation.goBack()}>
                     <Text style={styles.noCuenta}>Iniciar sesión</Text>
