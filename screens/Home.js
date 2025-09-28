@@ -1,9 +1,37 @@
-import React, { act } from 'react';
-import { View, Text, StyleSheet, Image, Pressable, ScrollView } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, Pressable, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
+import { getAuth } from 'firebase/auth';
+import { useSQLiteContext } from 'expo-sqlite';
 import Dispositivo from '../components/Dispositivo';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 export default function Home({ navigation }) {
     const isAuthenticated = false;
+    const userEmail = getAuth().currentUser?.email || null;
+    const db = useSQLiteContext();
+    const [dispositivos, setDispositivos] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const cargarDispositivos = async () => {
+        try {
+            setIsLoading(true);
+            const resultados = await db.getAllAsync('SELECT * FROM dispositivos WHERE userEmail = ?', [userEmail]);
+            setDispositivos(resultados);
+        }
+        catch (error) {
+            console.error('Error al cargar dispositivos:', error);
+        }
+        finally {
+            setIsLoading(false);
+        }
+    }
+    useEffect(() => {
+        cargarDispositivos();
+    }, []);
+
+    if (isLoading) {
+        return <ActivityIndicator size="large" color="#0000ff" />; 
+    }
+
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
             <Text style={styles.textoInicio}>Dispositivos</Text>
@@ -13,8 +41,17 @@ export default function Home({ navigation }) {
                 contentContainerStyle={styles.dispositivos}
                 style={styles.dispositivosContainer}
             >
-                <Dispositivo/>
-                <Dispositivo/>
+                {dispositivos.length === 0 ? (
+                    <Text style={{ margin: 16, color: '#636891' }}>No tienes dispositivos agregados.</Text>
+                ) : (
+                    dispositivos.map((d) => (
+                        <Dispositivo
+                            key={d.id}
+                            name={d.nombre}
+                            imageUri={d.foto}
+                        />
+                    ))
+                )}
                 <Pressable
                     onPress={() => navigation.navigate('AgregarDispositivo')}
                     style={styles.addCard}

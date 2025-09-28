@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { View, Text, Image, StyleSheet, Pressable, Alert } from 'react-native';
 
-export default function ElegirFoto() {
+export default function ElegirFoto({ onFotoSeleccionada }) {
     const [imagen, setImagen] = useState(null);
     
     const seleccionarDeGaleria = async () => {
@@ -23,6 +23,7 @@ export default function ElegirFoto() {
             
             if (!result.canceled && result.assets && result.assets[0]) {
                 setImagen(result.assets[0].uri);
+                if (onFotoSeleccionada) onFotoSeleccionada(result.assets[0].uri);
             }
         } catch (error) {
             console.log('Error al abrir galería:', error);
@@ -47,6 +48,7 @@ export default function ElegirFoto() {
             
             if (!result.canceled && result.assets && result.assets[0]) {
                 setImagen(result.assets[0].uri);
+                if (onFotoSeleccionada) onFotoSeleccionada(result.assets[0].uri);
             }
         } catch (error) {
             console.log('Error al abrir cámara:', error);

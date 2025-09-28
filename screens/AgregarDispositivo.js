@@ -1,60 +1,80 @@
-import React from 'react';
+import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { TextInput, View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { TextInput, View, Text, StyleSheet, Pressable, ScrollView, Alert } from 'react-native';
 import ElegirFoto from '../components/ElegirFoto';
+import { useSQLiteContext } from 'expo-sqlite';
+import { getAuth } from 'firebase/auth';
 
 export default function AgregarDispositivo({ navigation }) {
-    const { control, handleSubmit, formState: { errors } } = useForm({
-        defaultValues:{
+    const { control, handleSubmit, setValue, formState: { errors } } = useForm({
+        defaultValues: {
             nombre: '',
             descripcion: '',
             foto: ''
         }
     });
-    const onSubmit = (data) => {
-        // evitar "Cannot update a component ... while rendering a diferente componente"
-        // deferir la navegación al siguiente tick para no causar un setState durante el render
-        setTimeout(() => {
-            navigation.navigate('HomeMain');
-        }, 0);
+
+    const userEmail = getAuth().currentUser?.email || null;
+    const db = useSQLiteContext();
+
+    const onFotoSeleccionada = (uri) => {
+        setValue('foto', uri);
     };
+
+    const onSubmit = async (data) => {
+        try {
+            if (!data.nombre || !data.descripcion) {
+                throw new Error('Por favor, complete todos los campos.');
+            }
+            await db.runAsync(
+                'INSERT INTO dispositivos (nombre, descripcion, foto, userEmail) VALUES (?, ?, ?, ?)',
+                [data.nombre, data.descripcion, data.foto, userEmail]
+            );
+            Alert.alert('Éxito', 'Dispositivo agregado correctamente');
+            navigation.navigate('HomeMain');
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Error', error.message || 'No se pudo agregar el dispositivo');
+        }
+    };
+
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
             <View style={styles.contenido}>
                 <Text style={styles.textoInicio}>Añadir dispositivo</Text>
                 <Text style={styles.campoTexto}>Foto de perfil</Text>
-                <ElegirFoto/>
+                <ElegirFoto onFotoSeleccionada={onFotoSeleccionada} />
                 {errors.foto && <Text style={styles.textoError}>{errors.foto.message}</Text>}
                 <Text style={styles.campoTexto}>Nombre</Text>
                 <Controller
-                control={control}
-                name='nombre'
-                rules={{ required: 'Ingrese el nombre' }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                    style={styles.input}
-                    placeholder='Nombre'
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                    />
-                )}
+                    control={control}
+                    name='nombre'
+                    rules={{ required: 'Ingrese el nombre' }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            style={styles.input}
+                            placeholder='Nombre'
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                            value={value}
+                        />
+                    )}
                 />
                 {errors.nombre && <Text style={styles.textoError}>{errors.nombre.message}</Text>}
                 <Text style={styles.campoTexto}>Descripción</Text>
                 <Controller
-                control={control}
-                name='descripcion'
-                rules={{ required: 'Ingrese la descripción' }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                    style={styles.input}
-                    placeholder='Descripción (habitaciones)'
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                    />
-                )}
+                    control={control}
+                    name='descripcion'
+                    rules={{ required: 'Ingrese la descripción' }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            style={styles.input}
+                            placeholder='Descripción (habitaciones)'
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                            value={value}
+                        />
+                    )}
                 />
                 {errors.descripcion && <Text style={styles.textoError}>{errors.descripcion.message}</Text>}
                 <View style={styles.buttonCont}>

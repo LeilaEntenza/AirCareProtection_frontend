@@ -156,6 +156,9 @@ function AppStack(){
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
+  // Obtiene el mail del usuario autenticado
+  const userEmail = getAuth().currentUser?.email || null;
+
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -178,50 +181,59 @@ export default function App() {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre TEXT NOT NULL,
             descripcion TEXT,
-            foto TEXT
+            foto TEXT,
+            userEmail TEXT
           );
           CREATE TABLE IF NOT EXISTS historial (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             descripcion TEXT NOT NULL,
-            fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            userEmail TEXT
           );
           CREATE TABLE IF NOT EXISTS climaConfig (
             id INTEGER PRIMARY KEY CHECK (id = 0),
             noticacionClima INTEGER DEFAULT 1,
             minimaTemp INTEGER DEFAULT 0,
-            maximaTemp INTEGER DEFAULT 40
+            maximaTemp INTEGER DEFAULT 40,
+            userEmail TEXT
           );
           CREATE TABLE IF NOT EXISTS temperatura (
             id INTEGER PRIMARY KEY CHECK (id = 0),
             notificacionTemp INTEGER DEFAULT 1,
             minimaTemp INTEGER DEFAULT 5,
-            maximaTemp INTEGER DEFAULT 35
+            maximaTemp INTEGER DEFAULT 35,
+            userEmail TEXT
           );
           CREATE TABLE IF NOT EXISTS ubicacionConfig ( 
             id INTEGER PRIMARY KEY CHECK (id = 0),
             ubicacion TEXT,
-            ubicacionNotificacion INTEGER DEFAULT 1
+            ubicacionNotificacion INTEGER DEFAULT 1,
+            userEmail TEXT
           );
           CREATE TABLE IF NOT EXISTS contactos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre TEXT NOT NULL,
-            telefono INTEGER NOT NULL
+            telefono INTEGER NOT NULL,
+            userEmail TEXT
           );
           CREATE TABLE IF NOT EXISTS emergencias (
             id INTEGER PRIMARY KEY CHECK (id = 0),
             emergenciaAmbulancia INTEGER DEFAULT 1,
             emergenciaPolicia INTEGER DEFAULT 1,
-            emergenciaBomberos INTEGER DEFAULT 1
+            emergenciaBomberos INTEGER DEFAULT 1,
+            userEmail TEXT
           );
           CREATE TABLE IF NOT EXISTS alertas (
             id INTEGER PRIMARY KEY CHECK (id = 0),
             notificacionDentro INTEGER DEFAULT 1,
-            notificacionFuera INTEGER DEFAULT 1          
+            notificacionFuera INTEGER DEFAULT 1,
+            userEmail TEXT       
           );
           CREATE TABLE IF NOT EXISTS ajustesContacto (
             id INTEGER PRIMARY KEY CHECK (id = 0),
             notificacionRiesgo INTEGER DEFAULT 1,
-            notificacionEmergencia INTEGER DEFAULT 1
+            notificacionEmergencia INTEGER DEFAULT 1,
+            userEmail TEXT
           );
           PRAGMA journal_mode=WAL;
           `);
