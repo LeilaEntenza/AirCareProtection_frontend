@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
+import { SQLiteProvider } from 'expo-sqlite';
 
 import Home from './screens/Home';
 import Historial from './screens/Historial';
@@ -169,8 +170,24 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      {isAuthenticated ? <AppStack/> : <LoginStack/> }
-    </NavigationContainer>
+    <SQLiteProvider
+      databaseName='aircare_protection.db'
+      onInit={async (db) => {
+        await db.execAsync(`
+          CREATE TABLE IF NOT EXISTS dispositivos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            descripcion TEXT,
+            foto TEXT
+          );
+          PRAGMA journal_mode=WAL;
+          `);
+        }}
+      options={{ useNewConnection: false }}
+    >
+      <NavigationContainer>
+        {isAuthenticated ? <AppStack/> : <LoginStack/> }
+      </NavigationContainer>
+    </SQLiteProvider>
   );
 }

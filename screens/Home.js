@@ -2,8 +2,6 @@ import React, { act } from 'react';
 import { View, Text, StyleSheet, Image, Pressable, ScrollView } from 'react-native';
 import Dispositivo from '../components/Dispositivo';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-
 export default function Home({ navigation }) {
     const isAuthenticated = false;
     return (
