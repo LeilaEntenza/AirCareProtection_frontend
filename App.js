@@ -197,7 +197,32 @@ export default function App() {
             minimaTemp INTEGER DEFAULT 5,
             maximaTemp INTEGER DEFAULT 35
           );
-          
+          CREATE TABLE IF NOT EXISTS ubicacionConfig ( 
+            id INTEGER PRIMARY KEY CHECK (id = 0),
+            ubicacion TEXT,
+            ubicacionNotificacion INTEGER DEFAULT 1
+          );
+          CREATE TABLE IF NOT EXISTS contactos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            telefono INTEGER NOT NULL
+          );
+          CREATE TABLE IF NOT EXISTS emergencias (
+            id INTEGER PRIMARY KEY CHECK (id = 0),
+            emergenciaAmbulancia INTEGER DEFAULT 1,
+            emergenciaPolicia INTEGER DEFAULT 1,
+            emergenciaBomberos INTEGER DEFAULT 1
+          );
+          CREATE TABLE IF NOT EXISTS alertas (
+            id INTEGER PRIMARY KEY CHECK (id = 0),
+            notificacionDentro INTEGER DEFAULT 1,
+            notificacionFuera INTEGER DEFAULT 1          
+          );
+          CREATE TABLE IF NOT EXISTS ajustesContacto (
+            id INTEGER PRIMARY KEY CHECK (id = 0),
+            notificacionRiesgo INTEGER DEFAULT 1,
+            notificacionEmergencia INTEGER DEFAULT 1
+          );
           PRAGMA journal_mode=WAL;
           `);
         }}

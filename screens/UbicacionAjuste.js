@@ -1,7 +1,9 @@
-import React from 'react';
-import { ScrollView, View, Text, StyleSheet, Image, TextInput, Pressable} from 'react-native';
+import { useState} from 'react';
+import { ScrollView, View, Text, StyleSheet, Image, TextInput, Pressable, Switch} from 'react-native';
 
 export default function Ubicación({ navigation }) {
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
       <Image
@@ -14,6 +16,16 @@ export default function Ubicación({ navigation }) {
           style={styles.input}
           placeholder='Ubicación'
       />
+      <View style={styles.ubicacionNotificacion}>
+        <Text style={styles.label}>Verificar ubicación en tiempo real</Text>
+        <Switch
+          trackColor={{ false: "#000000", true: "#000000" }}
+          thumbColor="#ffffff"
+          ios_backgroundColor="#000000"
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+        />
+      </View>
       <Pressable style={styles.boton} onPress={() => navigation.goBack()}>
           <Text style={styles.textButton}>Guardar</Text>
       </Pressable>
@@ -58,4 +70,14 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
     },
+        ubicacionNotificacion: {
+    marginTop: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "90%",
+    padding: 15,
+    borderRadius: 12,
+    backgroundColor: "#e6e6e6",
+  },
 });
