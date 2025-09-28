@@ -180,6 +180,24 @@ export default function App() {
             descripcion TEXT,
             foto TEXT
           );
+          CREATE TABLE IF NOT EXISTS historial (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            descripcion TEXT NOT NULL,
+            fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          );
+          CREATE TABLE IF NOT EXISTS climaConfig (
+            id INTEGER PRIMARY KEY CHECK (id = 0),
+            noticacionClima INTEGER DEFAULT 1,
+            minimaTemp INTEGER DEFAULT 0,
+            maximaTemp INTEGER DEFAULT 40
+          );
+          CREATE TABLE IF NOT EXISTS temperatura (
+            id INTEGER PRIMARY KEY CHECK (id = 0),
+            notificacionTemp INTEGER DEFAULT 1,
+            minimaTemp INTEGER DEFAULT 5,
+            maximaTemp INTEGER DEFAULT 35
+          );
+          
           PRAGMA journal_mode=WAL;
           `);
         }}
