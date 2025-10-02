@@ -1,35 +1,80 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Pressable, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
-import { getAuth } from 'firebase/auth';
+import { View, Text, StyleSheet, Image, Pressable, ScrollView, ActivityIndicator } from 'react-native';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useSQLiteContext } from 'expo-sqlite';
 import Dispositivo from '../components/Dispositivo';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 export default function Home({ navigation }) {
-    const isAuthenticated = false;
-    const userEmail = getAuth().currentUser?.email || null;
     const db = useSQLiteContext();
     const [dispositivos, setDispositivos] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [userEmail, setUserEmail] = useState(null);
 
-    const cargarDispositivos = async () => {
-        try {
-            setIsLoading(true);
-            const resultados = await db.getAllAsync('SELECT * FROM dispositivos WHERE userEmail = ?', [userEmail]);
-            setDispositivos(resultados);
-        }
-        catch (error) {
-            console.error('Error al cargar dispositivos:', error);
-        }
-        finally {
-            setIsLoading(false);
-        }
-    }
+    // Escucha cambios de auth para obtener el email cuando esté disponible
     useEffect(() => {
-        cargarDispositivos();
+      const auth = getAuth();
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setUserEmail(user?.email || null);
+      });
+      return unsubscribe;
     }, []);
 
+    const cargarDispositivos = async () => {
+      // Protecciones: db y userEmail deben existir
+      if (!db) {
+        console.warn('DB no está inicializada aún');
+        return;
+      }
+      if (!userEmail) {
+        // usuario no autenticado: limpia lista y evita ejecutar query
+        setDispositivos([]);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+
+        let resultados = [];
+
+        // Si la API del provider tiene getAllAsync, úsala (fallback)
+        if (typeof db.getAllAsync === 'function') {
+          resultados = await db.getAllAsync('SELECT * FROM dispositivos WHERE userEmail = ?', [userEmail]);
+        } else if (typeof db.execAsync === 'function') {
+          // execAsync puede devolver distintos shapes según implementación; normalizamos
+          const res = await db.execAsync('SELECT * FROM dispositivos WHERE userEmail = ?', [userEmail]);
+          resultados = [];
+          if (Array.isArray(res)) {
+            res.forEach(r => {
+              if (r.rows && Array.isArray(r.rows)) resultados.push(...r.rows);
+              else if (r.rows && r.rows._array && Array.isArray(r.rows._array)) resultados.push(...r.rows._array);
+              else if (r.values && Array.isArray(r.values)) resultados.push(...r.values);
+            });
+          } else if (res && res.rows && res.rows._array) {
+            resultados = res.rows._array;
+          }
+        } else {
+          console.warn('El objeto db no expone getAllAsync ni execAsync; no se puede consultar.');
+        }
+
+        setDispositivos(resultados || []);
+      } catch (error) {
+        console.error('Error al cargar dispositivos:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    // recarga cuando cambie el email o la referencia a db
+    useEffect(() => {
+      if (userEmail && db) cargarDispositivos();
+    }, [userEmail, db]);
+
     if (isLoading) {
-        return <ActivityIndicator size="large" color="#0000ff" />; 
+        return (
+          <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        );
     }
 
     return (
