@@ -210,7 +210,8 @@ export default function App() {
 
         CREATE TABLE IF NOT EXISTS ubicacionConfig ( 
           id INTEGER PRIMARY KEY CHECK (id = 0),
-          ubicacion TEXT,
+          latitud TEXT,
+          longitud TEXT,
           ubicacionNotificacion INTEGER DEFAULT 1,
           userEmail TEXT
         );

@@ -11,6 +11,10 @@ export default function Ubicacion() {
     longitudeDelta: 0.05,
   });
 
+  const [dispositivos, setDispositivos] = useState({
+    
+  });
+
   const userLocation = async () => {
     let {status} = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
