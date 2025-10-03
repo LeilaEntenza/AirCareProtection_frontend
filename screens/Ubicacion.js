@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker} from 'react-native-maps';
 import { StyleSheet, View } from 'react-native';
+import * as Location from 'expo-location';
 
 export default function Ubicacion() {
   const [mapRegion, setMapRegion] = useState({
@@ -9,6 +10,26 @@ export default function Ubicacion() {
     latitudeDelta: 0.04,
     longitudeDelta: 0.05,
   });
+
+  const userLocation = async () => {
+    let {status} = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('No se permitió acceso a la localización')
+    }
+    let location = await Location.getCurrentPositionAsync({enableHighAccurancy: true});
+    setMapRegion({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      latitudeDelta: 0.04,
+      longitudeDelta: 0.05,
+    });
+    console.log(location.coords.latitude, location.coords.longitude);
+  }
+
+  useEffect(() => {
+    userLocation();
+  }, []);
+
   return (
     <View style={styles.container}>
       <MapView style={styles.map} region={mapRegion}>
