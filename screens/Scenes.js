@@ -1,18 +1,20 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; // usando iconos
+import * as Haptics from "expo-haptics";
 
 export default function Scenes({ navigation }) {
+  
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
       <Text style={styles.textoInicio}>Scenes</Text>
 
       <View style={styles.cardsContainer}>
 
-        <Pressable style={styles.cardScene} onPress={() => navigation.navigate('Clima')}>
-          <Icon name="weather-sunny" size={50} color="#fff" />
-          <Text style={styles.textoCardScene}>Clima</Text>
-        </Pressable>
+      <Pressable style={styles.cardScene} onPress={() => navigation.navigate('Clima')}>
+        <Icon name="weather-sunny" size={50} color="#fff" />
+        <Text style={styles.textoCardScene}>Clima</Text>
+      </Pressable>
 
         <Pressable style={styles.cardScene} onPress={() => navigation.navigate('Temperatura')}>
           <Icon name="thermometer" size={50} color="#fff" />
@@ -30,8 +32,13 @@ export default function Scenes({ navigation }) {
         </Pressable>
 
         <Pressable style={styles.cardScene} onPress={() => navigation.navigate('Emergencias')}>
-          <Icon name="alert-circle" size={50} color="#fff" />
+          <Icon name="alert-circle" size={49} color="#fff" />
           <Text style={styles.textoCardScene}>Emergencias</Text>
+        </Pressable>
+        
+        <Pressable style={styles.cardScene} onPress={() =>  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy) }>
+          <Icon name="alert-circle" size={49} color="#fff" />
+          <Text style={styles.textoCardScene}>Toca para vibrar</Text>
         </Pressable>
 
       </View>
