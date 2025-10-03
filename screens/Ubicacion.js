@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import MapView, { Marker} from 'react-native-maps';
 import { StyleSheet, View } from 'react-native';
 import * as Location from 'expo-location';
+import { useSQLiteContext } from 'expo-sqlite';
+import { getAuth, onAuthStateChanged} from 'firebase/auth';
 
 export default function Ubicacion() {
   const [mapRegion, setMapRegion] = useState({
@@ -12,7 +14,7 @@ export default function Ubicacion() {
   });
 
   const [dispositivos, setDispositivos] = useState({
-    
+
   });
 
   const userLocation = async () => {

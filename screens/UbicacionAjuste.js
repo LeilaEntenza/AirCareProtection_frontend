@@ -72,6 +72,15 @@ export default function UbicacionAjuste({ navigation }) {
       Alert.alert('Error', 'Base de datos o usuario no disponible');
       return;
     }
+    if (latitud < -90 || latitud > 90 || latitud.includes(',')) {
+      Alert.alert('Error', 'La latitud debe estar entre -90 y 90 y no debe contener comas (,).');
+      return;
+    }
+  
+    if (longitud < -180 || longitud > 180 || longitud.includes(',')) {
+      Alert.alert('Error', 'La longitud debe estar entre -180 y 180 y no debe contener comas (,).');
+      return;
+    }
     setIsLoading(true);
     try {
       const params = [0, latitud, longitud, ubicacionNotificacion ? 1 : 0, userEmail];
