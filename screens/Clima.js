@@ -3,6 +3,8 @@ import { ScrollView, View, Text, StyleSheet, Image, Switch, Pressable, ActivityI
 import Slider from '@react-native-community/slider';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useSQLiteContext } from 'expo-sqlite';
+import CustomSlider from '../components/CustomSlider';
+
 
 export default function Clima({ navigation }) {
   const db = useSQLiteContext();
@@ -130,37 +132,27 @@ export default function Clima({ navigation }) {
         />
       </View>
 
-      <View style={styles.sliderContainer}>
-        <Text style={styles.label}>Temperatura mínima agradable</Text>
-        <Text style={styles.value}>{tempMin} °C</Text>
-        <Slider
-          style={{ width: '90%', height: 40 }}
-          minimumValue={-50}
-          maximumValue={50}
-          step={1}
+      <View>
+        <CustomSlider
+          label="Temperatura mínima agradable"
           value={tempMin}
-          minimumTrackTintColor="#000000"
-          maximumTrackTintColor="#cccccc"
-          thumbTintColor="#ffffff"
           onValueChange={setTempMin}
-        />
-      </View>
-
-      <View style={styles.sliderContainer}>
-        <Text style={styles.label}>Temperatura máxima agradable</Text>
-        <Text style={styles.value}>{tempMax} °C</Text>
-        <Slider
-          style={{ width: '90%', height: 40 }}
-          minimumValue={-50}
-          maximumValue={50}
+          min={-50}
+          max={50}
           step={1}
-          value={tempMax}
-          minimumTrackTintColor="#000000"
-          maximumTrackTintColor="#cccccc"
-          thumbTintColor="#ffffff"
-          onValueChange={setTempMax}
+          unit="°C"
         />
-      </View>
+
+        <CustomSlider
+          label="Temperatura máxima agradable"
+          value={tempMax}
+          onValueChange={setTempMax}
+          min={-50}
+          max={50}
+          step={1}
+          unit="°C"
+        />
+      </View> 
 
       <Pressable style={styles.boton} onPress={handleGuardar}>
         <Text style={styles.textButton}>Guardar</Text>
