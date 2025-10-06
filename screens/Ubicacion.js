@@ -13,8 +13,11 @@ export default function Ubicacion() {
     longitudeDelta: 0.05,
   });
 
-  const [dispositivos, setDispositivos] = useState({
-
+  const [dispositivosUbicacion, setDispositivosUbicacion] = useState({
+    latitude: -34.60042931522899, 
+    longitude: -58.38416050349116,
+    latitudeDelta: 0.04,
+    longitudeDelta: 0.05,
   });
 
   const userLocation = async () => {
@@ -39,7 +42,8 @@ export default function Ubicacion() {
   return (
     <View style={styles.container}>
       <MapView style={styles.map} region={mapRegion}>
-        <Marker coordinate={mapRegion} title='Dispositivo'/>
+        <Marker coordinate={mapRegion} title='Mi ubicación'/>
+        <Marker coordinate={dispositivosUbicacion} title='Dispositivo'/>
       </MapView>
     </View>
   );
