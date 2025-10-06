@@ -2,9 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; // usando iconos
 import * as Haptics from "expo-haptics";
+import SendSMS from 'react-native-sms';
+import enviarSMS from '../components/EnviarSMS';
 
 export default function Scenes({ navigation }) {
-  
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
       <Text style={styles.textoInicio}>Scenes</Text>
@@ -39,6 +40,11 @@ export default function Scenes({ navigation }) {
         <Pressable style={styles.cardScene} onPress={() =>  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy) }>
           <Icon name="alert-circle" size={49} color="#fff" />
           <Text style={styles.textoCardScene}>Toca para vibrar</Text>
+        </Pressable>
+
+        <Pressable style={styles.cardScene} onPress={() =>  enviarSMS()}>
+          <Icon name="alert-circle" size={49} color="#fff" />
+          <Text style={styles.textoCardScene}>Enviar SMS</Text>
         </Pressable>
 
       </View>
