@@ -37,7 +37,8 @@
     "react-native-screens": "~4.11.1",
     "react-native-sms": "^1.12.0",
     "react-native-web": "^0.20.0",
-    "twilio": "^5.10.2"
+    "twilio": "^5.10.2",
+    "expo-contacts": "~14.2.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
