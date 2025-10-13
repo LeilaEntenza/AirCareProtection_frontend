@@ -42,11 +42,6 @@ export default function Scenes({ navigation }) {
           <Text style={styles.textoCardScene}>Toca para vibrar</Text>
         </Pressable>
 
-        <Pressable style={styles.cardScene} onPress={() =>  enviarSMS()}>
-          <Icon name="alert-circle" size={49} color="#fff" />
-          <Text style={styles.textoCardScene}>Enviar SMS</Text>
-        </Pressable>
-
       </View>
     </ScrollView>
   );
